@@ -10,3 +10,4 @@ watchdog~=3.0
 Werkzeug~=2.2
 Flask-WTF~=1.2.2
 python-dotenv~=1.0.1
+Django~=4.2.5
