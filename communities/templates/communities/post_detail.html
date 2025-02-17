@@ -1,0 +1,68 @@
+{% extends "communities/base.html" %}
+{% load community_extras %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Post Header and Details -->
+            <div class="card mb-4">
+                <div class="row g-0 align-items-center">
+                    <!-- User who created the post Image -->
+                    <div class="col-md-4 text-center p-3">
+                        <img src="{{ post.author.profile.image.url }}" alt="{{ post.author.username }}" class="community-img">
+                    </div>
+                    <!-- Information -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h1 class="card-title">{{ post.title }}</h1>
+                            <p><strong>Content:</strong> {{ post.content }}</p>
+                            <p class="text-muted small mb-0">Posted by <strong>{{ post.author }}</strong> on {{ post.created_at|date:"F j, Y, g:i a" }}</p>
+                            {% if user.id == post.author.id %}
+                                <a class="btn btn-secondary btn-sm" href="{% url 'post-update' post.id %}">Update</a>
+                                <a class="btn btn-danger btn-sm" href="{% url 'post-delete' post.id %}">Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form to Create a Post -->
+            {% if user.is_authenticated and user|is_member:post.community %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Create a New comment</h5>
+                        <form method="POST" action="{% url 'create-comment' post.id %}">
+                            {% csrf_token %}
+                            <div class="mb-2">
+                                <textarea name="content" class="form-control" placeholder="Write a comment..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">comment</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">You must be a member of this community to create a comment.</p>
+            {% endif %}
+
+            <!-- Posts Section -->
+            <h2 class="text-center mb-3">Posts Comments</h2>
+
+            {% for comment in comments %}
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <img src="{{ comment.author.profile.image.url }}" class="rounded-circle mr-2 cm-post-img" alt="{{ comment.author.username }}">
+                        <div class="d-flex align-items-center mb-2">
+                            <div>
+                                <p class="card-text">{{ comment.content|truncatewords:20 }}</p>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Posted by <strong>{{ comment.author }}</strong> on {{ comment.created_at|date:"F j, Y, g:i a" }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted text-center">There are no comments in this post yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

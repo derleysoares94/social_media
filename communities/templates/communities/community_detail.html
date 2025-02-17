@@ -1,0 +1,113 @@
+{% extends "communities/base.html" %}
+{% load community_extras %}
+{% block content %}
+<div class="container mt-4">
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-end">
+                {% if user.is_authenticated %}
+                    {% if user|is_member:community %}
+                        <a class="btn btn-primary btn-sm mt-1 mb-1" href="{% url 'community-unsubscribe' community.id %}">Unsubscribe</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm mt-1 mb-1" href="{% url 'community-subscribe' community.id %}">Subscribe</a>
+                    {% endif %}
+                {% endif %}
+                {% if user.id == community.author_id %}
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'community-update' community.id %}">Update</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'community-delete' community.id %}">Delete</a>
+                {% endif %}
+            </div>
+            <!-- Community Header and Details -->
+            <div class="card mb-4">
+                <div class="row g-0 align-items-center">
+                    <!-- Community Image -->
+                    <div class="col-md-4 text-center p-3">
+                        <img src="{{ community.image.url }}" alt="{{ community.name }}" class="community-img">
+                    </div>
+                    <!-- Information -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h1 class="card-title">{{ community.name }}</h1>
+                            <p><strong>Description:</strong> {{ community.description }}</p>
+                            <p><strong>Created on:</strong> {{ community.created_at|date:"F j, Y" }}</p>
+                            <p><strong>Members:</strong> {{ member_count }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form to Create a Post -->
+            {% if user.is_authenticated and user|is_member:community %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Create a New Post</h5>
+                        <form method="POST" action="{% url 'post-create' community.id %}">
+                            {% csrf_token %}
+                            <div class="mb-2">
+                                <input type="text" name="title" class="form-control" placeholder="Post title" required>
+                            </div>
+                            <div class="mb-2">
+                                <textarea name="content" class="form-control" placeholder="Write something..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Post</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">You must be a member of this community to create a post.</p>
+            {% endif %}
+
+            <!-- Posts Section -->
+            <h2 class="text-center mb-3">Community Posts</h2>
+
+            {% for post in posts %}
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <img src="{{ post.author.profile.image.url }}" class="rounded-circle mr-2 cm-post-img" alt="{{ post.author.username }}">
+                        <div class="d-flex align-items-center mb-2">
+                            <div>
+                                <h5 class="card-title mb-0">{{ post.title }}</h5>
+
+                                <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-0">Posted by <strong>{{ post.author }}</strong> on {{ post.created_at|date:"F j, Y, g:i a" }}</p>
+                        <a class="btn btn-primary btn-sm" href="{% url 'post-detail' post.id %}" >Read more</a>
+                        {% if user.id == post.author_id %}
+                            <a class="btn btn-secondary btn-sm" href="{% url 'post-update' post.id %}">Update</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'post-delete' post.id %}">Delete</a>
+                        {% elif user.id == community.author_id %}
+                            <a class="btn btn-danger btn-sm" href="{% url 'post-delete' post.id %}">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted text-center">There are no posts in this community yet.</p>
+            {% endfor %}
+
+            {% if is_paginated %}
+                <div class='post-pagination'>
+                    {% if page_obj.has_previous %}
+                    <a class='btn btn-outline-info mb-4' href='?page=1'>First</a>
+                    <a class='btn btn-outline-info mb-4' href='?page={{ page_obj.previous_page_number }}'>Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a class='btn btn-info mb-4' href='?page={{ num }}'>{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a class='btn btn-outline-info mb-4' href='?page={{ num }}'>{{ num }}</a>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <a class='btn btn-outline-info mb-4' href='?page={{ page_obj.next_page_number }}'>Next</a>
+                    <a class='btn btn-outline-info mb-4' href='?page={{ page_obj.paginator.num_pages }}'>Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,151 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    min-height: 100vh;
+}
+
+header, nav, footer {
+    background-color: #000;
+    color: #fff;
+}
+
+header {
+    padding: 10px 0;
+    width: 100%;
+    height: 80px;
+}
+
+nav {
+    display: flex;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.nav-link {
+    color: #fff;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: flex-end !important;
+}
+
+main {
+    padding: 20px;
+    background-color: #fff;
+    color: #000;
+    min-height: calc(100vh - 100px);
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+    height: 100px;
+    bottom: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #0000ff;
+}
+
+.pages-content, 
+.content-section {
+    width: 800px;
+}
+
+.alert {
+    height: 50px;
+}
+
+.content {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+}
+
+.content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.article-title {
+    color: #444444;
+}
+
+
+
+.article-content {
+    white-space: pre-line;
+}
+
+.article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+}
+
+.article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+.article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+}
+
+.community-img {
+    width: 150px;
+    height: 150px;
+    vertical-align: middle;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cm-post-img {
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+    object-fit: cover;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.btn-logout {
+    margin-top: 7px;
+}

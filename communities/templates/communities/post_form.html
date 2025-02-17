@@ -1,0 +1,22 @@
+{% extends "communities/base.html" %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="content-section card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Posts</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">
+                        {% if form.instance.pk %}
+                            Update Post
+                            {% else %}
+                            Create Post
+                            {% endif %}
+                    </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
