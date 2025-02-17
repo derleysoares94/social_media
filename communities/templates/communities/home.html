@@ -28,6 +28,8 @@
                 </div>
             </div>
         </div>
+    {% empty %}
+        <p>No communities have been created yet.</p>
     {% endfor %}
 
     {% if is_paginated %}
