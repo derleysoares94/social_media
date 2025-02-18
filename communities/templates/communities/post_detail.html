@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <!-- Form to Create a Post -->
+            <!-- Form to Create a Comment -->
             {% if user.is_authenticated and user|is_member:post.community %}
                 <div class="card mb-4">
                     <div class="card-body">
@@ -44,7 +44,7 @@
                 <p class="text-muted text-center">You must be a member of this community to create a comment.</p>
             {% endif %}
 
-            <!-- Posts Section -->
+            <!-- Comment Section -->
             <h2 class="text-center mb-3">Posts Comments</h2>
 
             {% for comment in comments %}
@@ -53,7 +53,7 @@
                         <img src="{{ comment.author.profile.image.url }}" class="rounded-circle mr-2 cm-post-img" alt="{{ comment.author.username }}">
                         <div class="d-flex align-items-center mb-2">
                             <div>
-                                <p class="card-text">{{ comment.content|truncatewords:20 }}</p>
+                                <p class="card-text">{{ comment.content }}</p>
                             </div>
                         </div>
                         <p class="text-muted small mb-0">Posted by <strong>{{ comment.author }}</strong> on {{ comment.created_at|date:"F j, Y, g:i a" }}</p>
